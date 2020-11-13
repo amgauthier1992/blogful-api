@@ -5,6 +5,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const logger = require('./logger');
 const { NODE_ENV } = require("./config");
+const ArticlesService = require('./articles-service')
 
 const app = express();
 
@@ -26,8 +27,35 @@ app.use(function validateBearerToken(req, res, next) {
   next()
 })
 
-app.get("/", (req, res) => {
-  res.send("Hello, boilerplate!");
+//creating our GET endpoint that gets all articles from the db. Here we use the 
+//ArticlesService.getAllArticles method inside the endpoint to populate the response
+app.get("/articles", (req, res, next) => {
+  //reading the db property that we set on the app object from server.js
+  const knexInstance = req.app.get('db')
+  //passing knexInstance as an argument to our service method. If you look at the service methods,
+  //they all have parameters named knex, which represent the knexInstance.
+  ArticlesService.getAllArticles(knexInstance)
+    .then(articles => {
+      res.json(articles)
+    })
+    //Note we're passing next into the .catch from the promise chain so that any 
+    //errors get handled by our error handler middleware.
+    .catch(next) 
+});
+
+app.get("/articles/:article_id", (req, res, next) => {
+  // res.json({ "requested_id": req.params.article_id, this: "should fail" })
+  const knexInstance = req.app.get('db')
+  ArticlesService.getById(knexInstance, req.params.article_id)
+    .then(article => {
+      if(!article){
+        return res.status(400).json({
+          error: { message: `Article doesn't exist` }
+        })
+      }
+      res.json(article)
+    })
+    .catch(next)
 });
 
 app.use(function errorHandler(error, req, res, next) {
