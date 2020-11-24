@@ -12,5 +12,6 @@ CREATE TABLE blogful_comments (
 
 --A foreign key with cascade delete means that if a record in the parent 
 --table is deleted, then the corresponding records in the child table will 
---automatically be deleted.
+--automatically be deleted. i.e. folders and notes. if a folder with 3 notes gets
+--deleted, those notes corresponding to that folder will also get deleted
 

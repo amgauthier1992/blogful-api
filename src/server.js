@@ -1,6 +1,6 @@
 //Notice we've used the DB_URL environment variable, the same variable used 
 //in migrations (postgrator connects to our DB by reading the postgrator-config file
-//containing the DB_URL as the "connectionString"). 
+//containing the DB_URL as the 'connectionString'). 
 
 //In production projects, we use different users (postgres roles) with different 
 //levels of permissions (i.e. superuser etc.) for the app and for the migrations. 
@@ -9,13 +9,13 @@
 //credentials and URLs in the .env, one for migrations and one for the app, however,
 //for brevity, we aren't doing that in this project.
 
-const knex = require("knex")
-const app = require("./app");
-const { PORT, DB_URL } = require("./config");
+const knex = require('knex')
+const app = require('./app');
+const { PORT, DATABASE_URL } = require('./config');
 
 const db = knex({
-  client: "pg",
-  connection: DB_URL,
+  client: 'pg',
+  connection: DATABASE_URL, //to test Postman against test-db, change this to TEST_DB_URL
 })
 
 //We can use an Express feature to set a property on the app object from the ./src/server.js 

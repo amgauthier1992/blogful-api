@@ -8,3 +8,4 @@ CREATE TABLE blogful_articles (
     content TEXT,
     date_published TIMESTAMPTZ DEFAULT now() NOT NULL
 );
+

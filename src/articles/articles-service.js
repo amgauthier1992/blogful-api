@@ -26,6 +26,10 @@ const ArticlesService = {
     return knex('blogful_articles')
       .where({ id })
       .update(newArticleFields)
+      .returning('*')
+      .then(rows => {
+        return rows[0]
+      })
   },
 }
 
